@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Main
+{% endblock %}
+
+
+{% block body %}
+
+<h2>Hyper news</h2>
+
+{% regroup news_list by created|slice:10 as ordered_news_list %}
+{% for date in ordered_news_list %}
+<h4>{{ date.grouper }}</h4>
+<ul>
+    {% for article in date.list %}
+    <li>
+        <a href="{% url 'main_url' %}/{{ article.link }}/">{{ article.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endfor %}
+
+{% if not request.GET %}
+<a href="{% url 'add_article_url' %}">Create Page</a>
+{% endif %}
+
+<form method="get">
+    <label for="query">Query: </label>
+    <input id="query" type="search" name="q">
+    <input type="submit" value="Search">
+</form>
+
+{% if request.GET %}
+<a href="{% url 'main_url' %}">Main page</a>
+{% endif %}
+
+{% endblock %}
